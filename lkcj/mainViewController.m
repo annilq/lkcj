@@ -17,7 +17,7 @@
 @implementation mainViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title=@"首页";
+    self.navigationItem.title=@"模块选择";
     [self initDatalist];
 }
 

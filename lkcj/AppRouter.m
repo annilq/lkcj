@@ -7,7 +7,8 @@
 //
 
 #import "AppRouter.h"
-#import "main/mainViewController.h"
+#import "mainViewController.h"
+#import "IndexViewController.h"
 #import "user/userUIViewController.h"
 #import "login/loginViewController.h"
 #import "AppManger.h"
@@ -26,16 +27,17 @@
 }
 -(void)goMainView{
     [AppManger sharedInstance].islogin=true;
-    mainViewController *main=[[mainViewController alloc] init];
-    UINavigationController *mainNav=[[UINavigationController alloc] initWithRootViewController:main];
-    main.tabBarItem=[[UITabBarItem alloc] initWithTitle:@"加油哇" image:[UIImage imageNamed:@"gz-a"] tag:0];
+    IndexViewController *index=[[IndexViewController alloc] init];
+    UINavigationController *mainNav=[[UINavigationController alloc] initWithRootViewController:index];
+    index.tabBarItem=[[UITabBarItem alloc] initWithTitle:@"聊天" image:[UIImage imageNamed:@"gz-a"] tag:0];
 
     userUIViewController *user=[[userUIViewController alloc] init];
     UINavigationController *userNav=[[UINavigationController alloc] initWithRootViewController:user];
-    user.tabBarItem=[[UITabBarItem alloc] initWithTitle:@"思辰" image:[UIImage imageNamed:@"user"] tag:1];
+    user.tabBarItem=[[UITabBarItem alloc] initWithTitle:@"工作" image:[UIImage imageNamed:@"user"] tag:1];
 
     UITabBarController *mainBar=[[UITabBarController alloc] init];
     mainBar.viewControllers=@[mainNav,userNav];
+//    mainBar.selectedIndex=1;
     [[AppManger sharedInstance] appInitWithCon:mainBar];
 }
 -(void)goLoginView{

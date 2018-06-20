@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01022B3520D9332F00168C85 /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01022B3420D9332F00168C85 /* IndexViewController.m */; };
+		01022B3B20D9552A00168C85 /* IndexBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 01022B3A20D9552A00168C85 /* IndexBanner.m */; };
 		0111A73C20CFF2CD00818F1D /* DatalistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0111A73B20CFF2CD00818F1D /* DatalistViewController.m */; };
+		013E52F020DA8EF50056D0F7 /* TitleReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E52EF20DA8EF50056D0F7 /* TitleReusableView.m */; };
 		016A3CBA2087951300DC5479 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 016A3CB92087951300DC5479 /* UIColor+Hex.m */; };
 		019550A6207CD9B200834994 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 019550A5207CD9B200834994 /* AppDelegate.m */; };
 		019550A9207CD9B200834994 /* loginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 019550A8207CD9B200834994 /* loginViewController.m */; };
@@ -24,8 +27,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01022B3320D9332F00168C85 /* IndexViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexViewController.h; sourceTree = "<group>"; };
+		01022B3420D9332F00168C85 /* IndexViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
+		01022B3920D9552A00168C85 /* IndexBanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexBanner.h; sourceTree = "<group>"; };
+		01022B3A20D9552A00168C85 /* IndexBanner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexBanner.m; sourceTree = "<group>"; };
 		0111A73A20CFF2CD00818F1D /* DatalistViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatalistViewController.h; sourceTree = "<group>"; };
 		0111A73B20CFF2CD00818F1D /* DatalistViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatalistViewController.m; sourceTree = "<group>"; };
+		013E52EE20DA8EF50056D0F7 /* TitleReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TitleReusableView.h; sourceTree = "<group>"; };
+		013E52EF20DA8EF50056D0F7 /* TitleReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TitleReusableView.m; sourceTree = "<group>"; };
 		016A3CB82087951300DC5479 /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		016A3CB92087951300DC5479 /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		019550A1207CD9B200834994 /* lkcj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lkcj.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,8 +98,6 @@
 		01837199207E3EC9008455B7 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				019550BD207CF3C000834994 /* mainViewController.h */,
-				019550BE207CF3C000834994 /* mainViewController.m */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -123,6 +130,14 @@
 				019550A5207CD9B200834994 /* AppDelegate.m */,
 				01DECB7D20B59BCE000C2319 /* AppRouter.h */,
 				01DECB7E20B59BCE000C2319 /* AppRouter.m */,
+				019550BD207CF3C000834994 /* mainViewController.h */,
+				019550BE207CF3C000834994 /* mainViewController.m */,
+				01022B3320D9332F00168C85 /* IndexViewController.h */,
+				01022B3420D9332F00168C85 /* IndexViewController.m */,
+				01022B3920D9552A00168C85 /* IndexBanner.h */,
+				01022B3A20D9552A00168C85 /* IndexBanner.m */,
+				013E52EE20DA8EF50056D0F7 /* TitleReusableView.h */,
+				013E52EF20DA8EF50056D0F7 /* TitleReusableView.m */,
 				0111A73A20CFF2CD00818F1D /* DatalistViewController.h */,
 				0111A73B20CFF2CD00818F1D /* DatalistViewController.m */,
 				019550C0207CF46A00834994 /* detailViewController.h */,
@@ -231,8 +246,11 @@
 				019550A6207CD9B200834994 /* AppDelegate.m in Sources */,
 				01DECB7B20B594BD000C2319 /* AppManger.m in Sources */,
 				019550C2207CF46A00834994 /* detailViewController.m in Sources */,
+				013E52F020DA8EF50056D0F7 /* TitleReusableView.m in Sources */,
 				019550BF207CF3C000834994 /* mainViewController.m in Sources */,
+				01022B3B20D9552A00168C85 /* IndexBanner.m in Sources */,
 				01DECB7520B591E3000C2319 /* registerViewController.m in Sources */,
+				01022B3520D9332F00168C85 /* IndexViewController.m in Sources */,
 				01DECB7820B591FA000C2319 /* resetpswViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

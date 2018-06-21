@@ -8,6 +8,7 @@
 
 #import "IndexBanner.h"
 #import "TitleReusableView.h"
+#import "DatalistViewController.h"
 #import "UIColor+Hex.h"
 @implementation IndexBanner
 
@@ -77,26 +78,29 @@
     UIButton *aboutme=[UIButton buttonWithType:UIButtonTypeCustom];
 
     aboutme.translatesAutoresizingMaskIntoConstraints=NO;
-    [aboutme setImage:[UIImage imageNamed:@"gyjg-logo.png"] forState:UIControlStateNormal];
+    [aboutme setImage:[UIImage imageNamed:@"aboutme.png"] forState:UIControlStateNormal];
     [aboutme setTitle:@"我发起的" forState:UIControlStateNormal];
     [aboutme setTitleColor:[UIColor colorWithHexString:@"8c8c8c"] forState:UIControlStateNormal];
-    aboutme.titleEdgeInsets = UIEdgeInsetsMake(0, -aboutme.imageView.frame.size.width-60, -aboutme.imageView.frame.size.height-80, 0);
+    aboutme.titleLabel.font=[UIFont systemFontOfSize:14];
+    aboutme.titleEdgeInsets = UIEdgeInsetsMake(0, -aboutme.imageView.frame.size.width-36, -aboutme.imageView.frame.size.height-50, 0);
     aboutme.imageEdgeInsets = UIEdgeInsetsMake(-aboutme.titleLabel.intrinsicContentSize.height, 0, 0, -aboutme.titleLabel.intrinsicContentSize.width);
     [self addSubview:aboutme];
-
+    [aboutme addTarget:self action:@selector(golist) forControlEvents:UIControlEventTouchUpInside];
     UIButton *forme=[UIButton buttonWithType:UIButtonTypeCustom];
     forme.translatesAutoresizingMaskIntoConstraints=NO;
-    [forme setImage:[UIImage imageNamed:@"gyjg-logo.png"] forState:UIControlStateNormal];
+    [forme setImage:[UIImage imageNamed:@"newflow.png"] forState:UIControlStateNormal];
     [forme setTitle:@"带我审批" forState:UIControlStateNormal];
     [forme setTitleColor:[UIColor colorWithHexString:@"8c8c8c"] forState:UIControlStateNormal];
-    forme.titleEdgeInsets = UIEdgeInsetsMake(0, -forme.imageView.frame.size.width-60, -forme.imageView.frame.size.height-80, 0);
+    forme.titleLabel.font=[UIFont systemFontOfSize:14];
+    forme.titleEdgeInsets = UIEdgeInsetsMake(0, -forme.imageView.frame.size.width-40, -forme.imageView.frame.size.height-50, 0);
     forme.imageEdgeInsets = UIEdgeInsetsMake(-forme.titleLabel.intrinsicContentSize.height, 0, 0, -forme.titleLabel.intrinsicContentSize.width);
-
+    [forme addTarget:self action:@selector(golist) forControlEvents:UIControlEventTouchUpInside];
+    
     [self addSubview:forme];
     NSArray *h=[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[aboutme]-[forme]" options:0 metrics:nil views:@{@"aboutme":aboutme,@"forme":forme}];
-    NSArray *v=[NSLayoutConstraint constraintsWithVisualFormat:@"V:[scrollView]-30-[aboutme(60)]" options:0 metrics:nil views:@{@"aboutme":aboutme,@"scrollView":self.scrollView}];
+    NSArray *v=[NSLayoutConstraint constraintsWithVisualFormat:@"V:[scrollView]-20-[aboutme(60)]" options:0 metrics:nil views:@{@"aboutme":aboutme,@"scrollView":self.scrollView}];
     NSArray *ph=[NSLayoutConstraint constraintsWithVisualFormat:@"H:[aboutme]-[forme(==aboutme)]-0-|" options:0 metrics:nil views:@{@"forme":forme,@"aboutme":aboutme}];
-    NSArray *pv=[NSLayoutConstraint constraintsWithVisualFormat:@"V:[scrollView]-30-[forme(==aboutme)]" options:0 metrics:nil views:@{@"forme":forme,@"aboutme":aboutme,@"scrollView":self.scrollView}];
+    NSArray *pv=[NSLayoutConstraint constraintsWithVisualFormat:@"V:[scrollView]-20-[forme(==aboutme)]" options:0 metrics:nil views:@{@"forme":forme,@"aboutme":aboutme,@"scrollView":self.scrollView}];
     [self addConstraints:h];
     [self addConstraints:v];
     [self addConstraints:ph];
@@ -118,5 +122,9 @@
     UIPageControl *currentControl=(UIPageControl *)sender;
     NSInteger currentPage=currentControl.currentPage;
     [self.scrollView setContentOffset:CGPointMake(currentPage*self.bounds.size.width, 0)] ;
+}
+-(void)golist{
+    DatalistViewController *list=[[DatalistViewController alloc] init];
+    [self.delegate.navigationController pushViewController:list animated:false];
 }
 @end

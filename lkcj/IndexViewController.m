@@ -10,7 +10,7 @@
 #import "IndexBanner.h"
 #import "TitleReusableView.h"
 #import "AppDelegate.h"
-#import "DatalistViewController.h"
+#import "categoryCollectionViewController.h"
 #import "UIColor+Hex.h"
 @interface IndexViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property UICollectionView *collectionview;
@@ -28,11 +28,14 @@
 -(void)initDatalist{
     UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
     layout.scrollDirection=UICollectionViewScrollDirectionVertical;
-    layout.itemSize=CGSizeMake(100, 100);
-    layout.sectionInset = UIEdgeInsetsMake(10,10,10,10);
+    layout.itemSize=CGSizeMake((SCREEN_WIDTH)/3, 130);
+    layout.sectionInset = UIEdgeInsetsMake(0,0,30,0);
+    layout.minimumLineSpacing=0;
+    layout.minimumInteritemSpacing=0;
     UICollectionView *collectionView=[[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:layout];
     [collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     collectionView.backgroundColor=[UIColor clearColor];
+    collectionView.showsVerticalScrollIndicator=NO;
     collectionView.delegate=self;
     collectionView.dataSource=self;
     [self.view addSubview:collectionView];
@@ -59,6 +62,7 @@
             IndexBanner *banner = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                      withReuseIdentifier:@"banner"
                                                                             forIndexPath:indexPath];
+            banner.delegate=self;
             return banner;
         }else{
             TitleReusableView *label = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
@@ -94,17 +98,25 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.backgroundColor=[UIColor colorWithHexString:@"4095ff"];
-    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    label.text=[NSString stringWithFormat:@"%ld section %ld row",indexPath.section,indexPath.row];
-    label.textColor=[UIColor whiteColor];
+    cell.backgroundColor=[UIColor colorWithHexString:@"ffffff"];
+    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    label.text=@"经营管理";
+    label.textColor=[UIColor colorWithHexString:@"8c8c8c"];
     label.textAlignment=NSTextAlignmentCenter;
+    label.font=[UIFont systemFontOfSize:14];
+    UIImageView *image=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_jy.png"]];
+    image.center = CGPointMake(cell.contentView.bounds.size.width/2,cell.contentView.bounds.size.height/2-10);
+    label.center = CGPointMake(cell.contentView.bounds.size.width/2,cell.contentView.bounds.size.height/2+image.frame.size.height/2+10);
+    [cell.contentView addSubview:image];
     [cell.contentView addSubview:label];
+    cell.contentView.layer.borderWidth = 0.5;
+    cell.contentView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+
     return cell;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    DatalistViewController *list=[[DatalistViewController alloc] init];
-    [self.navigationController pushViewController:list animated:false];
+        categoryCollectionViewController *category=[[categoryCollectionViewController alloc] init];
+    [self.navigationController pushViewController:category animated:false];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

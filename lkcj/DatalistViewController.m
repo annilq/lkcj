@@ -20,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title=@"列表页";
+    self.navigationItem.title=@"数据页";
     [self initserachbar];
     [self initsegment];
     [self initTable];
@@ -46,7 +46,7 @@
     self.seg.translatesAutoresizingMaskIntoConstraints=NO;
     NSArray *h=[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-30-[seg]-30-|" options:0 metrics:nil views:@{@"seg":self.seg}];
     //69=20+44+10
-    NSArray *v=[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[searchbar]-10-[seg(40)]" options:0 metrics:nil views:@{@"seg":self.seg,@"searchbar":self.searchbar}];
+    NSArray *v=[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[searchbar]-10-[seg(30)]" options:0 metrics:nil views:@{@"seg":self.seg,@"searchbar":self.searchbar}];
     [self.view addConstraints:h];
     [self.view addConstraints:v];
 }
@@ -70,7 +70,7 @@
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 50;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell=[self.table dequeueReusableCellWithIdentifier:@"cell"];

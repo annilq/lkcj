@@ -26,7 +26,7 @@
     [self addSubview:self.label];
 }
 -(void) setLabelTitle:(NSString *) text{
-    self.label.text=text;
+    self.label.text=[NSString stringWithFormat:@"    %@",text];
     [self setNeedsLayout];
 }
 @end

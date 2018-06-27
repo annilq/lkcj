@@ -84,6 +84,8 @@
 			children = (
 				016A3CB82087951300DC5479 /* UIColor+Hex.h */,
 				016A3CB92087951300DC5479 /* UIColor+Hex.m */,
+				019064B720E3F1A500F16A80 /* AppUtil.h */,
+				019064B820E3F1A500F16A80 /* AppUtil.m */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -106,8 +108,6 @@
 			children = (
 				019550BD207CF3C000834994 /* mainViewController.h */,
 				019550BE207CF3C000834994 /* mainViewController.m */,
-				019064B720E3F1A500F16A80 /* AppUtil.h */,
-				019064B820E3F1A500F16A80 /* AppUtil.m */,
 			);
 			path = main;
 			sourceTree = "<group>";

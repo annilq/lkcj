@@ -13,7 +13,7 @@
 #import "categoryCollectionViewController.h"
 #import "UIColor+Hex.h"
 @interface IndexViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
-@property UICollectionView *collectionview;
+@property UICollectionView *collectionView;
 @property IndexBanner *banner;
 @end
 
@@ -22,9 +22,38 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title=@"首页";
+    [self getdatalist];
     [self initDatalist];
 }
-
+-(void)getdatalist{
+    NSString *urlString = @"http://oa.jianguanoa.com/my-process/list-as-category-app.do";
+    // 一些特殊字符编码
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+    // 3.采用苹果提供的共享session
+    NSURLSession *sharedSession = [NSURLSession sharedSession];
+    
+    // 4.由系统直接返回一个dataTask任务
+    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        // 网络请求完成之后就会执行，NSURLSession自动实现多线程
+        NSLog(@"%@",[NSThread currentThread]);
+        if (data && (error == nil)) {
+            // 网络访问成功
+            NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        } else {
+            // 网络访问失败
+            NSLog(@"error=%@",error);
+        }
+    }];
+    
+    // 5.每一个任务默认都是挂起的，需要调用 resume 方法
+    [dataTask resume];
+    
+    
+}
 -(void)initDatalist{
     UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
     layout.scrollDirection=UICollectionViewScrollDirectionVertical;
@@ -32,17 +61,17 @@
     layout.sectionInset = UIEdgeInsetsMake(0,0,30,0);
     layout.minimumLineSpacing=0;
     layout.minimumInteritemSpacing=0;
-    UICollectionView *collectionView=[[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:layout];
-    [collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-    collectionView.backgroundColor=[UIColor clearColor];
-    collectionView.showsVerticalScrollIndicator=NO;
-    collectionView.delegate=self;
-    collectionView.dataSource=self;
-    [self.view addSubview:collectionView];
-    [collectionView registerClass:[IndexBanner class]
+     self.collectionView=[[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:layout];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    self.collectionView.backgroundColor=[UIColor clearColor];
+    self.collectionView.showsVerticalScrollIndicator=NO;
+    self.collectionView.delegate=self;
+    self.collectionView.dataSource=self;
+    [self.view addSubview:self.collectionView];
+    [self.collectionView registerClass:[IndexBanner class]
        forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
               withReuseIdentifier:@"banner"];
-    [collectionView registerClass:[TitleReusableView class]
+    [self.collectionView registerClass:[TitleReusableView class]
        forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
               withReuseIdentifier:@"title"];
 }
@@ -111,11 +140,11 @@
     [cell.contentView addSubview:label];
     cell.contentView.layer.borderWidth = 0.5;
     cell.contentView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-
+    
     return cell;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-        categoryCollectionViewController *category=[[categoryCollectionViewController alloc] init];
+    categoryCollectionViewController *category=[[categoryCollectionViewController alloc] init];
     [self.navigationController pushViewController:category animated:false];
 }
 - (void)didReceiveMemoryWarning {

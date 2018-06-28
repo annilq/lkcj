@@ -1,5 +1,5 @@
 //
-//  DatalistViewController.m
+//  categorlistController.m
 //  lkcj
 //
 //  Created by annilq on 2018/6/12.
@@ -8,15 +8,15 @@
 
 #import "AppDelegate.h"
 #import "detailViewController.h"
-#import "DatalistViewController.h"
-@interface DatalistViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
+#import "categorlistController.h"
+@interface categorlistController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 @property UITableView *table;
 @property UISearchBar *searchbar;
 @property UISegmentedControl *seg;
 @property UITableViewCell *cell;
 @end
 
-@implementation DatalistViewController
+@implementation categorlistController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -11,10 +11,14 @@
 #import "TitleReusableView.h"
 #import "AppDelegate.h"
 #import "categoryCollectionViewController.h"
+#import "categorlistController.h"
 #import "UIColor+Hex.h"
+#import "AppConfig.h"
 @interface IndexViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property UICollectionView *collectionView;
 @property IndexBanner *banner;
+@property NSMutableArray *catlists;
+@property NSMutableArray *remindlists;
 @end
 
 @implementation IndexViewController
@@ -23,6 +27,7 @@
     [super viewDidLoad];
     self.navigationItem.title=@"首页";
     [self getdatalist];
+    [self getremindlist];
     [self initDatalist];
 }
 -(void)getdatalist{
@@ -40,9 +45,13 @@
     NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         // 网络请求完成之后就会执行，NSURLSession自动实现多线程
         NSLog(@"%@",[NSThread currentThread]);
+        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         if (data && (error == nil)) {
             // 网络访问成功
-            NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            self.catlists=[json valueForKey:@"result"];
+            
+            [self.collectionView reloadData];
         } else {
             // 网络访问失败
             NSLog(@"error=%@",error);
@@ -51,8 +60,37 @@
     
     // 5.每一个任务默认都是挂起的，需要调用 resume 方法
     [dataTask resume];
+}
+-(void)getremindlist{
+    NSString *urlString = @"http://oa.jianguanoa.com/reminder-config/get-all-remind-app.do";
+    // 一些特殊字符编码
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:urlString];
     
+    // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+    // 3.采用苹果提供的共享session
+    NSURLSession *sharedSession = [NSURLSession sharedSession];
     
+    // 4.由系统直接返回一个dataTask任务
+    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        // 网络请求完成之后就会执行，NSURLSession自动实现多线程
+        NSLog(@"%@",[NSThread currentThread]);
+        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        if (data && (error == nil)) {
+            // 网络访问成功
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            self.remindlists=[json valueForKey:@"result"];
+            
+            [self.collectionView reloadData];
+        } else {
+            // 网络访问失败
+            NSLog(@"error=%@",error);
+        }
+    }];
+    
+    // 5.每一个任务默认都是挂起的，需要调用 resume 方法
+    [dataTask resume];
 }
 -(void)initDatalist{
     UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
@@ -79,7 +117,12 @@
     return 2;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 5;
+    if(section==0){
+        return [self.catlists count] ;
+    }else{
+        return [self.remindlists count];
+    }
+    
 }
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
            viewForSupplementaryElementOfKind:(NSString *)kind
@@ -129,7 +172,14 @@
     UICollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     cell.backgroundColor=[UIColor colorWithHexString:@"ffffff"];
     UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-    label.text=@"经营管理";
+    NSMutableDictionary *cellData;
+    if(indexPath.section==0){
+        cellData=[self.catlists objectAtIndex:indexPath.row];
+         label.text=[cellData valueForKey:@"categoryName"];
+    }else if(indexPath.section==1){
+        cellData=[self.remindlists objectAtIndex:indexPath.row];
+        label.text=[cellData valueForKey:@"title"];
+    }
     label.textColor=[UIColor colorWithHexString:@"8c8c8c"];
     label.textAlignment=NSTextAlignmentCenter;
     label.font=[UIFont systemFontOfSize:14];
@@ -144,8 +194,14 @@
     return cell;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    categoryCollectionViewController *category=[[categoryCollectionViewController alloc] init];
-    [self.navigationController pushViewController:category animated:false];
+    if(indexPath.section==0){
+        categoryCollectionViewController *category=[[categoryCollectionViewController alloc] init];
+        [self.navigationController pushViewController:category animated:false];
+    }else{
+        categorlistController *list=[[categorlistController alloc] init];
+        [self.navigationController pushViewController:list animated:false];
+    }
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

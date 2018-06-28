@@ -1,5 +1,5 @@
 //
-//  categorcell
+//  DataListCellTableViewCell.h
 //  lkcj
 //
 //  Created by annilq on 2018/6/28.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface categorcell : UITableViewCell
+@interface DataListCellTableViewCell : UITableViewCell
 
 @end

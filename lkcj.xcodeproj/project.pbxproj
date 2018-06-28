@@ -11,6 +11,10 @@
 		01022B3B20D9552A00168C85 /* IndexBanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 01022B3A20D9552A00168C85 /* IndexBanner.m */; };
 		013E52F020DA8EF50056D0F7 /* TitleReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E52EF20DA8EF50056D0F7 /* TitleReusableView.m */; };
 		016A3CBA2087951300DC5479 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 016A3CB92087951300DC5479 /* UIColor+Hex.m */; };
+		0185C62E20E51965007AAE2F /* categorlistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0185C62C20E51965007AAE2F /* categorlistController.m */; };
+		0185C63B20E52F62007AAE2F /* AppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 0185C63A20E52F62007AAE2F /* AppConfig.m */; };
+		0185C63E20E53B55007AAE2F /* DataListCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0185C63D20E53B55007AAE2F /* DataListCellTableViewCell.m */; };
+		0185C64120E53B69007AAE2F /* categorcell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0185C64020E53B69007AAE2F /* categorcell.m */; };
 		019064B020E3EEF700F16A80 /* categoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 019064AF20E3EEF700F16A80 /* categoryCollectionViewController.m */; };
 		019064B520E3EF6A00F16A80 /* detailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 019064B120E3EF6A00F16A80 /* detailViewController.m */; };
 		019064B620E3EF6A00F16A80 /* DatalistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 019064B420E3EF6A00F16A80 /* DatalistViewController.m */; };
@@ -37,6 +41,14 @@
 		013E52EF20DA8EF50056D0F7 /* TitleReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TitleReusableView.m; sourceTree = "<group>"; };
 		016A3CB82087951300DC5479 /* UIColor+Hex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		016A3CB92087951300DC5479 /* UIColor+Hex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
+		0185C62B20E51965007AAE2F /* categorlistController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = categorlistController.h; path = lkcj/category/categorlistController.h; sourceTree = SOURCE_ROOT; };
+		0185C62C20E51965007AAE2F /* categorlistController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = categorlistController.m; path = lkcj/category/categorlistController.m; sourceTree = SOURCE_ROOT; };
+		0185C63920E52F62007AAE2F /* AppConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
+		0185C63A20E52F62007AAE2F /* AppConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppConfig.m; sourceTree = "<group>"; };
+		0185C63C20E53B55007AAE2F /* DataListCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataListCellTableViewCell.h; path = lkcj/datalist/DataListCellTableViewCell.h; sourceTree = SOURCE_ROOT; };
+		0185C63D20E53B55007AAE2F /* DataListCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataListCellTableViewCell.m; path = lkcj/datalist/DataListCellTableViewCell.m; sourceTree = SOURCE_ROOT; };
+		0185C63F20E53B69007AAE2F /* categorcell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = categorcell.h; path = lkcj/category/categorcell.h; sourceTree = SOURCE_ROOT; };
+		0185C64020E53B69007AAE2F /* categorcell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = categorcell.m; path = lkcj/category/categorcell.m; sourceTree = SOURCE_ROOT; };
 		019064AE20E3EEF700F16A80 /* categoryCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = categoryCollectionViewController.h; path = lkcj/category/categoryCollectionViewController.h; sourceTree = SOURCE_ROOT; };
 		019064AF20E3EEF700F16A80 /* categoryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = categoryCollectionViewController.m; path = lkcj/category/categoryCollectionViewController.m; sourceTree = SOURCE_ROOT; };
 		019064B120E3EF6A00F16A80 /* detailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = detailViewController.m; path = lkcj/datalist/detailViewController.m; sourceTree = SOURCE_ROOT; };
@@ -112,11 +124,24 @@
 			path = main;
 			sourceTree = "<group>";
 		};
+		0185C63820E52F42007AAE2F /* config */ = {
+			isa = PBXGroup;
+			children = (
+				0185C63920E52F62007AAE2F /* AppConfig.h */,
+				0185C63A20E52F62007AAE2F /* AppConfig.m */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
 		019064AC20E3EE1100F16A80 /* category */ = {
 			isa = PBXGroup;
 			children = (
 				019064AE20E3EEF700F16A80 /* categoryCollectionViewController.h */,
 				019064AF20E3EEF700F16A80 /* categoryCollectionViewController.m */,
+				0185C62B20E51965007AAE2F /* categorlistController.h */,
+				0185C62C20E51965007AAE2F /* categorlistController.m */,
+				0185C63F20E53B69007AAE2F /* categorcell.h */,
+				0185C64020E53B69007AAE2F /* categorcell.m */,
 			);
 			name = category;
 			path = "New Group";
@@ -127,6 +152,8 @@
 			children = (
 				019064B220E3EF6A00F16A80 /* DatalistViewController.h */,
 				019064B420E3EF6A00F16A80 /* DatalistViewController.m */,
+				0185C63C20E53B55007AAE2F /* DataListCellTableViewCell.h */,
+				0185C63D20E53B55007AAE2F /* DataListCellTableViewCell.m */,
 				019064B320E3EF6A00F16A80 /* detailViewController.h */,
 				019064B120E3EF6A00F16A80 /* detailViewController.m */,
 			);
@@ -153,6 +180,7 @@
 		019550A3207CD9B200834994 /* lkcj */ = {
 			isa = PBXGroup;
 			children = (
+				0185C63820E52F42007AAE2F /* config */,
 				019064AD20E3EE2700F16A80 /* datalist */,
 				019064AC20E3EE1100F16A80 /* category */,
 				01DECB8320B5A467000C2319 /* user */,
@@ -268,11 +296,13 @@
 				01DECB7F20B59BCE000C2319 /* AppRouter.m in Sources */,
 				019064B920E3F1A500F16A80 /* AppUtil.m in Sources */,
 				01DECB8220B5A45F000C2319 /* userUIViewController.m in Sources */,
+				0185C63E20E53B55007AAE2F /* DataListCellTableViewCell.m in Sources */,
 				019550A9207CD9B200834994 /* loginViewController.m in Sources */,
 				016A3CBA2087951300DC5479 /* UIColor+Hex.m in Sources */,
 				019064B620E3EF6A00F16A80 /* DatalistViewController.m in Sources */,
 				019550B4207CD9B400834994 /* main.m in Sources */,
 				019550A6207CD9B200834994 /* AppDelegate.m in Sources */,
+				0185C63B20E52F62007AAE2F /* AppConfig.m in Sources */,
 				01DECB7B20B594BD000C2319 /* AppManger.m in Sources */,
 				013E52F020DA8EF50056D0F7 /* TitleReusableView.m in Sources */,
 				019550BF207CF3C000834994 /* mainViewController.m in Sources */,
@@ -281,6 +311,8 @@
 				019064B520E3EF6A00F16A80 /* detailViewController.m in Sources */,
 				01022B3520D9332F00168C85 /* IndexViewController.m in Sources */,
 				019064B020E3EEF700F16A80 /* categoryCollectionViewController.m in Sources */,
+				0185C64120E53B69007AAE2F /* categorcell.m in Sources */,
+				0185C62E20E51965007AAE2F /* categorlistController.m in Sources */,
 				01DECB7820B591FA000C2319 /* resetpswViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

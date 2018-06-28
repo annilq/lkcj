@@ -9,6 +9,7 @@
 #import "categoryCollectionViewController.h"
 #import "AppDelegate.h"
 #import "UIColor+Hex.h"
+#import "categorlistController.h"
 @interface categoryCollectionViewController ()
 
 @end
@@ -39,7 +40,6 @@ static NSString * const reuseIdentifier = @"Cell";
     // Register cell classes
     self.navigationItem.title=@"列表页";
     self.collectionView.backgroundColor=[UIColor clearColor];
-
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
     // Do any additional setup after loading the view.
@@ -92,7 +92,10 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 #pragma mark <UICollectionViewDelegate>
-
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    categorlistController *list=[[categorlistController alloc] init];
+    [self.navigationController pushViewController:list animated:false];
+}
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {

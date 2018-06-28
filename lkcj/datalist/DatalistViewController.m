@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "detailViewController.h"
 #import "DatalistViewController.h"
+#import "DataListCellTableViewCell.h"
 @interface DatalistViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 @property UITableView *table;
 @property UISearchBar *searchbar;
@@ -54,7 +55,7 @@
     NSLog(@"%ld",seg.selectedSegmentIndex);
 }
 -(void)initTable{
-    self.cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+    self.cell=[[DataListCellTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     self.table=[[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.table.translatesAutoresizingMaskIntoConstraints=NO;
     self.table.delegate=self;
@@ -71,12 +72,12 @@
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 50;
+    return 5;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell=[self.table dequeueReusableCellWithIdentifier:@"cell"];
+    DataListCellTableViewCell *cell=[self.table dequeueReusableCellWithIdentifier:@"cell"];
     if(cell==nil){
-        cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell=[[DataListCellTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     cell.textLabel.text=@"hey";
     cell.detailTextLabel.text=@"annilq";

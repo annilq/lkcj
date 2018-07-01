@@ -10,8 +10,8 @@
 #import "IndexBanner.h"
 #import "TitleReusableView.h"
 #import "AppDelegate.h"
-#import "categoryCollectionViewController.h"
-#import "categorlistController.h"
+#import "category/categoryCollectionViewController.h"
+#import "category/categorlistController.h"
 #import "UIColor+Hex.h"
 #import "AppConfig.h"
 @interface IndexViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
@@ -31,7 +31,7 @@
     [self initDatalist];
 }
 -(void)getdatalist{
-    NSString *urlString = @"http://oa.jianguanoa.com/my-process/list-as-category-app.do";
+    NSString *urlString = @"http://oa.jianguanoa.com/app-data-list/get-main-menu.do";
     // 一些特殊字符编码
     urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *url = [NSURL URLWithString:urlString];
@@ -50,8 +50,9 @@
             // 网络访问成功
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             self.catlists=[json valueForKey:@"result"];
-            
-            [self.collectionView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
         } else {
             // 网络访问失败
             NSLog(@"error=%@",error);
@@ -81,8 +82,9 @@
             // 网络访问成功
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
             self.remindlists=[json valueForKey:@"result"];
-            
-            [self.collectionView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
         } else {
             // 网络访问失败
             NSLog(@"error=%@",error);
@@ -173,17 +175,23 @@
     cell.backgroundColor=[UIColor colorWithHexString:@"ffffff"];
     UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
     NSMutableDictionary *cellData;
+    // module or flow icon
+    UIImageView *image;
     if(indexPath.section==0){
         cellData=[self.catlists objectAtIndex:indexPath.row];
-         label.text=[cellData valueForKey:@"categoryName"];
+         label.text=[cellData valueForKey:@"text"];
+        NSString *categoryType = [[cellData valueForKey:@"name"] lowercaseString];
+             image=[[UIImageView alloc] initWithImage:[UIImage imageNamed:[AppConfig getImageSelectedFromMoudleType:categoryType]]];
+
     }else if(indexPath.section==1){
         cellData=[self.remindlists objectAtIndex:indexPath.row];
         label.text=[cellData valueForKey:@"title"];
+        NSString *formKey = [cellData valueForKey:@"formKey"];
+        image=[[UIImageView alloc] initWithImage:[UIImage imageNamed:[AppConfig getImageFromformKey:formKey]]];
     }
     label.textColor=[UIColor colorWithHexString:@"8c8c8c"];
     label.textAlignment=NSTextAlignmentCenter;
     label.font=[UIFont systemFontOfSize:14];
-    UIImageView *image=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_jy.png"]];
     image.center = CGPointMake(cell.contentView.bounds.size.width/2,cell.contentView.bounds.size.height/2-10);
     label.center = CGPointMake(cell.contentView.bounds.size.width/2,cell.contentView.bounds.size.height/2+image.frame.size.height/2+10);
     [cell.contentView addSubview:image];
@@ -196,9 +204,13 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.section==0){
         categoryCollectionViewController *category=[[categoryCollectionViewController alloc] init];
+        NSDictionary *cellData=[self.catlists objectAtIndex:indexPath.row];
+        category.functionId=[cellData valueForKey:@"value"];
         [self.navigationController pushViewController:category animated:false];
     }else{
         categorlistController *list=[[categorlistController alloc] init];
+       NSDictionary *cellData=[self.remindlists objectAtIndex:indexPath.row];
+        list.functionId= [cellData valueForKey:@"functionId"];
         [self.navigationController pushViewController:list animated:false];
     }
 

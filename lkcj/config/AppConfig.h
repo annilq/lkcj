@@ -9,5 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface AppConfig : NSObject
-
++ (NSString *)getImageFromMoudleType:(NSString *)key ;
++ (NSString *)getImageSelectedFromMoudleType:(NSString *)key;
++ (NSString *)getImageFromformKey:(NSString *)key;
 @end

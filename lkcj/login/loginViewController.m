@@ -58,7 +58,9 @@
         if (data && (error == nil)) {
             // 网络访问成功
             NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-            [[AppRouter sharedInstance] goMainView];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[AppRouter sharedInstance] goMainView];
+            });
         } else {
             // 网络访问失败
             NSLog(@"error=%@",error);

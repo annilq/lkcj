@@ -12,7 +12,7 @@
 @end
 @implementation AppConfig
 
-+ (NSString *)jgWorkflowLeftImgNameForKey:(NSString *)key {
++ (NSString *)getImageFromMoudleType:(NSString *)key {
     
     static dispatch_once_t onceToken;
     static NSDictionary *jg_workflow_left_dict = nil;
@@ -28,7 +28,7 @@
     return jg_workflow_left_dict[key];
 }
 
-+ (NSString *)jgWorkflowLeftSelectedImgNameForKey:(NSString *)key {
++ (NSString *)getImageSelectedFromMoudleType:(NSString *)key {
     
     static dispatch_once_t onceToken;
     static NSDictionary *jg_workflow_left_dict = nil;
@@ -44,7 +44,7 @@
     return jg_workflow_left_dict[key];
 }
 
-+ (NSString *)jgMenusImgNameForKey:(NSString *)key {
++ (NSString *)getImageFromformKey:(NSString *)key {
     static dispatch_once_t onceToken;
     static NSDictionary *jg_menus_dict = nil;
     dispatch_once(&onceToken, ^{

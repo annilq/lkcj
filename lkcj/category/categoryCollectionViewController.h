@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface categoryCollectionViewController : UICollectionViewController
-
+@property NSArray *catlists;
+@property NSNumber *functionId;
 @end

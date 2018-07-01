@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface categorlistController : UIViewController
-
+@property NSNumber *functionId;
 @end

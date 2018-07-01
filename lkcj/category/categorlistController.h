@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface categorlistController : UIViewController
+@interface categorlistController : UITableViewController
 @property NSNumber *functionId;
 @end

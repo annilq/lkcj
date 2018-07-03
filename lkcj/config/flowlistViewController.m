@@ -1,34 +1,31 @@
 //
-//  DatalistViewController.m
+//  flowlistViewController.m
 //  lkcj
 //
-//  Created by annilq on 2018/6/12.
+//  Created by annilq on 2018/7/3.
 //  Copyright © 2018年 annilq. All rights reserved.
 //
 
+#import "flowlistViewController.h"
 #import "AppDelegate.h"
 #import "detailViewController.h"
-#import "DatalistViewController.h"
 #import "DataListCellTableViewCell.h"
 #import "AppUtil.h"
-@interface DatalistViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
+@interface flowlistViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 @property UITableView *table;
 @property UISearchBar *searchbar;
 @property UISegmentedControl *seg;
 @property UITableViewCell *cell;
 @property NSArray *catlists;
-@property NSNumber *flag;
-
 @end
 
-@implementation DatalistViewController
+@implementation flowlistViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title=@"待我审批";
+    self.navigationItem.title=@"我发起的";
     [self initserachbar];
     [self initsegment];
-    [self getdatalist];
     [self initTable];
 }
 -(void)initserachbar{
@@ -45,8 +42,8 @@
     NSLog(@"search");
 }
 -(void)initsegment{
-    self.seg=[[UISegmentedControl alloc]initWithItems:@[@"未批复",@"已批复"]];
-    self.seg.selectedSegmentIndex=0;
+    self.seg=[[UISegmentedControl alloc]initWithItems:@[@"已通过",@"审核中",@"未批准"]];
+    self.seg.selectedSegmentIndex=1;
     [self.seg addTarget:self action:@selector(switchTab:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.seg];
     self.seg.translatesAutoresizingMaskIntoConstraints=NO;
@@ -58,16 +55,11 @@
 }
 -(void)switchTab:(UISegmentedControl *)seg{
     NSLog(@"%ld",seg.selectedSegmentIndex);
-    [self getdatalist];
 }
 -(void)getdatalist{
-    NSMutableString *urlString;
-    if(self.seg.selectedSegmentIndex==1){
-        urlString =[NSMutableString stringWithFormat: @"http://oa.jianguanoa.com//my-task/get-untreated.do?&limit=10&start=0"];
-    }else{
-        urlString =[NSMutableString stringWithFormat: @"http://oa.jianguanoa.com//my-task/get-treated.do?&limit=10&start=0"];
-    }
+    NSString *urlString =[NSString stringWithFormat: @"http://oa.jianguanoa.com/my-process/my-process-list-for-app.do?flag=%ld&limit=10&start=0",self.seg.selectedSegmentIndex+1];
     // 一些特殊字符编码
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *url = [NSURL URLWithString:urlString];
     // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
@@ -112,20 +104,21 @@
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.catlists count];
+    return 5;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     DataListCellTableViewCell *cell=[self.table dequeueReusableCellWithIdentifier:@"cell"];
     if(cell==nil){
         cell=[[DataListCellTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
-    NSDictionary *celData=[self.catlists objectAtIndex:indexPath.row];
-    [cell configCellWithData:celData];
+    cell.textLabel.text=@"hey";
+    cell.detailTextLabel.text=@"annilq";
+    cell.imageView.image=[UIImage imageNamed:@"user"];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 92;
+-(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
+    return YES;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     detailViewController *detail=[[detailViewController alloc] init];
@@ -138,13 +131,13 @@
 }
 
 /*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
 
 @end

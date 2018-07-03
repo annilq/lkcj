@@ -10,4 +10,5 @@
 
 @interface categorlistController : UITableViewController
 @property NSNumber *functionId;
+@property NSDictionary *listConfig;
 @end

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface DataListCellTableViewCell : UITableViewCell
-
+-(void) configCellWithData:(NSDictionary *)cellData;
 @end

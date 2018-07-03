@@ -14,30 +14,30 @@
     self=[super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"catcell"];
     return self;
 }
--(void) configCellWithData:(NSDictionary *)cellData{
-//    self.textLabel.text=[cellData objectForKey:@"projectName"];
-    UILabel *title=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, self.frame.size.width, 25)];
-    title.text=[cellData objectForKey:@"projectName"];
+-(void) configCellWithConfig:(NSDictionary *)config andData:(NSDictionary *)cellData{
+    NSString *title=[cellData objectForKey:[config valueForKey:@"title"]] ;
+    NSString *name=[cellData objectForKey:[config valueForKey:@"name"]] ;
+    NSString *date=[cellData objectForKey:[config valueForKey:@"date"]];
+    UILabel *titleLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, self.frame.size.width, 25)];
+    titleLabel.text=title;
    UIImageView *img=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"name"]];
     img.frame=CGRectMake(10, 35, 25, 25);
-    UILabel *name=[[UILabel alloc] initWithFrame:CGRectMake(40, 35, 100, 25)];
-    name.text=[cellData objectForKey:@"userName"];
-    name.textColor=[UIColor colorWithHexString:@"999999"];
-    name.font=[UIFont systemFontOfSize:14];
+    UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(40, 35, 100, 25)];
+    nameLabel.text=name;
+    nameLabel.textColor=[UIColor colorWithHexString:@"999999"];
+    nameLabel.font=[UIFont systemFontOfSize:14];
     UIImageView *img2=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"w"]];
     img2.frame=CGRectMake(130, 35,25, 25);
-    UILabel *date=[[UILabel alloc] initWithFrame:CGRectMake(160, 35, 100, 25)];
-    date.text=[cellData objectForKey:@"createDate"];
-    date.textColor=[UIColor colorWithHexString:@"999999"];
-    date.font=[UIFont systemFontOfSize:14];
+    UILabel *dateLabel=[[UILabel alloc] initWithFrame:CGRectMake(160, 35, 100, 25)];
+    dateLabel.text=date;
+    dateLabel.textColor=[UIColor colorWithHexString:@"999999"];
+    dateLabel.font=[UIFont systemFontOfSize:14];
 
-    [self.contentView addSubview:title];
-    [self.contentView addSubview:name];
-    [self.contentView addSubview:date];
+    [self.contentView addSubview:titleLabel];
+    [self.contentView addSubview:nameLabel];
+    [self.contentView addSubview:dateLabel];
     [self.contentView addSubview:img];
     [self.contentView addSubview:img2];
-//    self.detailText.frame=[cellData objectForKey:@"userName"];
-//    self.detailTextLabel.frame=[cellData objectForKey:@"userName"];
 }
 - (void)drawRect:(CGRect)rect
 {

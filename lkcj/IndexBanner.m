@@ -9,6 +9,7 @@
 #import "IndexBanner.h"
 #import "TitleReusableView.h"
 #import "DatalistViewController.h"
+#import "flowlistViewController.h"
 #import "UIColor+Hex.h"
 @implementation IndexBanner
 
@@ -85,16 +86,16 @@
     aboutme.titleEdgeInsets = UIEdgeInsetsMake(0, -aboutme.imageView.frame.size.width-36, -aboutme.imageView.frame.size.height-50, 0);
     aboutme.imageEdgeInsets = UIEdgeInsetsMake(-aboutme.titleLabel.intrinsicContentSize.height, 0, 0, -aboutme.titleLabel.intrinsicContentSize.width);
     [self addSubview:aboutme];
-    [aboutme addTarget:self action:@selector(golist) forControlEvents:UIControlEventTouchUpInside];
+    [aboutme addTarget:self action:@selector(goflowList) forControlEvents:UIControlEventTouchUpInside];
     UIButton *forme=[UIButton buttonWithType:UIButtonTypeCustom];
     forme.translatesAutoresizingMaskIntoConstraints=NO;
     [forme setImage:[UIImage imageNamed:@"newflow.png"] forState:UIControlStateNormal];
-    [forme setTitle:@"带我审批" forState:UIControlStateNormal];
+    [forme setTitle:@"待我审批" forState:UIControlStateNormal];
     [forme setTitleColor:[UIColor colorWithHexString:@"8c8c8c"] forState:UIControlStateNormal];
     forme.titleLabel.font=[UIFont systemFontOfSize:14];
     forme.titleEdgeInsets = UIEdgeInsetsMake(0, -forme.imageView.frame.size.width-40, -forme.imageView.frame.size.height-50, 0);
     forme.imageEdgeInsets = UIEdgeInsetsMake(-forme.titleLabel.intrinsicContentSize.height, 0, 0, -forme.titleLabel.intrinsicContentSize.width);
-    [forme addTarget:self action:@selector(golist) forControlEvents:UIControlEventTouchUpInside];
+    [forme addTarget:self action:@selector(goDatalist) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:forme];
     NSArray *h=[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[aboutme]-[forme]" options:0 metrics:nil views:@{@"aboutme":aboutme,@"forme":forme}];
@@ -123,8 +124,12 @@
     NSInteger currentPage=currentControl.currentPage;
     [self.scrollView setContentOffset:CGPointMake(currentPage*self.bounds.size.width, 0)] ;
 }
--(void)golist{
+-(void)goDatalist{
     DatalistViewController *list=[[DatalistViewController alloc] init];
+    [self.delegate.navigationController pushViewController:list animated:false];
+}
+-(void)goflowList{
+    flowlistViewController *list=[[flowlistViewController alloc] init];
     [self.delegate.navigationController pushViewController:list animated:false];
 }
 @end

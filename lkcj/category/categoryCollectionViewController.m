@@ -67,8 +67,8 @@ static NSString * const reuseIdentifier = @"Cell";
     // 4.由系统直接返回一个dataTask任务
     NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         // 网络请求完成之后就会执行，NSURLSession自动实现多线程
-        NSLog(@"%@",[NSThread currentThread]);
-        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+//        NSLog(@"%@",[NSThread currentThread]);
+//        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         if (data && (error == nil)) {
             // 网络访问成功
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
@@ -108,7 +108,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    return [self.catlists count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -135,6 +135,7 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark <UICollectionViewDelegate>
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     categorlistController *list=[[categorlistController alloc] init];
+    list.functionId=[[self.catlists objectAtIndex:indexPath.row] valueForKey:@"value"];
     [self.navigationController pushViewController:list animated:false];
 }
 /*

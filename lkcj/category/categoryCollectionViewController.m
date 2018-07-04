@@ -49,41 +49,14 @@ static NSString * const reuseIdentifier = @"Cell";
 -(void)getdatalist{
     NSString *urlString = @"http://oa.jianguanoa.com/app-data-list/get-sub-menu.do";
     // 一些特殊字符编码
-    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
-    request.HTTPMethod=@"POST";
-    [request setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded"] forHTTPHeaderField:@"Content-Type"];
     NSDictionary *paramData=@{@"functionId":[NSNumber numberWithInt:[self.functionId intValue]]};
-    NSString *paramStr=[AppUtil transDictToStr:paramData];
-    NSString *param = [paramStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSData *postData=[param dataUsingEncoding:NSUTF8StringEncoding];
-    request.HTTPBody=postData;
-    // 3.采用苹果提供的共享session
-    NSURLSession *sharedSession = [NSURLSession sharedSession];
-    // 4.由系统直接返回一个dataTask任务
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        // 网络请求完成之后就会执行，NSURLSession自动实现多线程
-//        NSLog(@"%@",[NSThread currentThread]);
-//        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        if (data && (error == nil)) {
-            // 网络访问成功
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            self.catlists=[json valueForKey:@"result"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadData];
-            });
-        } else {
-            // 网络访问失败
-            NSLog(@"error=%@",error);
-        }
+    [AppUtil postDataTo:urlString withBody:paramData andBlock:^(NSDictionary *data) {
+        self.catlists=[data valueForKey:@"result"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadData];
+        });
     }];
     
-    // 5.每一个任务默认都是挂起的，需要调用 resume 方法
-    [dataTask resume];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -91,14 +64,14 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -128,7 +101,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [cell.contentView addSubview:label];
     cell.contentView.layer.borderWidth = 0.5;
     cell.contentView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-
+    
     return cell;
 }
 
@@ -139,32 +112,32 @@ static NSString * const reuseIdentifier = @"Cell";
     [self.navigationController pushViewController:list animated:false];
 }
 /*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
+ // Uncomment this method to specify if the specified item should be highlighted during tracking
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ return YES;
+ }
+ */
 
 /*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
+ // Uncomment this method to specify if the specified item should be selected
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ return YES;
+ }
+ */
 
 /*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
+ // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+ return NO;
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+ return NO;
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+ 
+ }
+ */
 
 @end

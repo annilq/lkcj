@@ -11,4 +11,6 @@
 @interface AppUtil : NSObject
 +(NSString *)transDictToStr:(NSDictionary *)params;
 +(NSString*) removeLastOneChar:(NSString*)origin;
++(void) postDataTo:(NSString*)urlString withBody:(NSDictionary *)body andBlock:(void (^)(NSDictionary *))success;
++(void) getDataFrom:(NSString*)httpurl withParams:(NSDictionary *)params andBlock:(void (^)(NSDictionary *))success;
 @end

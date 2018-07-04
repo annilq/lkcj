@@ -26,6 +26,7 @@
     self.navigationItem.title=@"我发起的";
     [self initserachbar];
     [self initsegment];
+    [self getdatalist];
     [self initTable];
 }
 -(void)initserachbar{
@@ -55,36 +56,19 @@
 }
 -(void)switchTab:(UISegmentedControl *)seg{
     NSLog(@"%ld",seg.selectedSegmentIndex);
+    [self getdatalist];
 }
 -(void)getdatalist{
-    NSString *urlString =[NSString stringWithFormat: @"http://oa.jianguanoa.com/my-process/my-process-list-for-app.do?flag=%ld&limit=10&start=0",self.seg.selectedSegmentIndex+1];
-    // 一些特殊字符编码
-    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL *url = [NSURL URLWithString:urlString];
-    // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
-    // 3.采用苹果提供的共享session
-    NSURLSession *sharedSession = [NSURLSession sharedSession];
-    // 4.由系统直接返回一个dataTask任务
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        // 网络请求完成之后就会执行，NSURLSession自动实现多线程
-        NSLog(@"%@",[NSThread currentThread]);
-        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        if (data && (error == nil)) {
-            // 网络访问成功
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            self.catlists=[json valueForKey:@"dataList"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.table reloadData];
-            });
-        } else {
-            // 网络访问失败
-            NSLog(@"error=%@",error);
-        }
+    NSString *urlString = @"http://oa.jianguanoa.com/my-process/my-process-list-for-app.do";
+    NSDictionary *param=@{@"flag":[NSNumber numberWithInt:(int)self.seg.selectedSegmentIndex+1],@"limit":[NSNumber numberWithInt:10],@"start":[NSNumber numberWithInt:0]};
+
+    NSLog(@"data11111=========%@",param);
+    [AppUtil getDataFrom:urlString withParams:param andBlock:^(NSDictionary *data) {
+        self.catlists=[data valueForKey:@"dataList"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.table reloadData];
+        });
     }];
-    
-    // 5.每一个任务默认都是挂起的，需要调用 resume 方法
-    [dataTask resume];
 }
 -(void)initTable{
     self.cell=[[DataListCellTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
@@ -104,21 +88,20 @@
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return [self.catlists count];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     DataListCellTableViewCell *cell=[self.table dequeueReusableCellWithIdentifier:@"cell"];
     if(cell==nil){
         cell=[[DataListCellTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
-    cell.textLabel.text=@"hey";
-    cell.detailTextLabel.text=@"annilq";
-    cell.imageView.image=[UIImage imageNamed:@"user"];
+    NSDictionary *celData=[self.catlists objectAtIndex:indexPath.row];
+    [cell configCellWithData:celData];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
--(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-    return YES;
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 92;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     detailViewController *detail=[[detailViewController alloc] init];

@@ -28,12 +28,12 @@
     }
     return cutted;
 }
-+(void) getDataFrom:(NSString*)url withParams:(NSDictionary *)params andBlock:(void (^)(NSDictionary *))success
++(void) getDataFrom:(NSString*)httpurl withParams:(NSDictionary *)params andBlock:(void (^)(NSDictionary *))success
 {
     if(params!=nil){
-        url=[NSString stringWithFormat:@"%@%@",url,[self transDictToStr],]
+        httpurl=[NSString stringWithFormat:@"%@?%@",httpurl,[self transDictToStr:params]];
     }
-    NSString *urlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *urlString = [httpurl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *url = [NSURL URLWithString:urlString];
     
     // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
@@ -49,7 +49,7 @@
         if (data && (error == nil)) {
             // 网络访问成功
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            callback(json)
+            success(json);
         } else {
             // 网络访问失败
             NSLog(@"error=%@",error);
@@ -85,7 +85,7 @@
             // 网络访问成功
             NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            success(json)
+            success(json);
         } else {
             // 网络访问失败
             NSLog(@"error=%@",error);
@@ -97,62 +97,62 @@
 }
 
 
-#pragma mark - Request Parameters
-+ (void)sendHttpRequestWithHTTPURLString:(NSString *)URLString
-                              parameters:(NSMutableDictionary *)parameters
-                                 success:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel *kBasicModel))success
-                                 failure:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel, NSError * _Nullable error, NSString * _Nullable errorStr))failure {
-    [self sendHttpRequestWithHTTPMethod:@"POST" URLString:URLString parameters:parameters success:success failure:failure];
-}
-+ (void)sendHttpRequestWithHTTPMethod:(NSString *)method
-                            URLString:(NSString *)URLString
-                           parameters:(NSMutableDictionary *)parameters
-                              success:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel *kBasicModel))success
-                              failure:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel, NSError * _Nullable error, NSString * _Nullable errorStr))failure {
-    NSURLRequest *urlRequest = [KHttpPackageModel HTTPRequestOperationForUploadDataWithHTTPMethod:method URLString:URLString parameters:parameters];
-    __block void(^kSuccessBlock)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel) = success;
-    __block void(^kFailureBlock)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel, NSError * _Nullable error, NSString * _Nullable errorStr) = failure;
-    kWeakfy(self);
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-        kStrongfy(kWeakSelf);
-        NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        KBasicModel *kBasicModel = [KBasicModel yy_modelWithJSON:jsonStr];
-        
-        if (httpResponse.statusCode == 200 && kBasicModel.code == 200) {
-            [kStrongSelf returnSuccessByHttpResponse:httpResponse andKBasicModel:kBasicModel andSuccess:kSuccessBlock];
-        }else{
-            [kStrongSelf returnFailureByHttpResponse:httpResponse andKBasicModel:kBasicModel andError:error andFailure:kFailureBlock];
-        }
-    }];
-    [task resume];
-}
-
-#pragma mark - UploadData URLRequest
-+ (NSURLRequest *)HTTPRequestOperationForUploadDataWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(NSDictionary *)parameters {
-    URLString = [URLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
-    
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URLString]];
-    
-    NSMutableURLRequest *mutableRequest = [urlRequest mutableCopy];
-    mutableRequest.timeoutInterval = timeoutInterval_1;
-    mutableRequest.cachePolicy = NSURLRequestReloadIgnoringCacheData;
-    [mutableRequest setHTTPMethod:method];
-    
-    NSData *postData = [[self kNSStringFromNSDictionary:parameters] dataUsingEncoding:NSUTF8StringEncoding];
-    [mutableRequest setHTTPBody:postData];
-    [mutableRequest setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded"] forHTTPHeaderField:@"Content-Type"];
-    //[mutableRequest setValue:[NSString stringWithFormat:@"application/json"] forHTTPHeaderField:@"Content-Type"];
-    [mutableRequest setValue:[NSString stringWithFormat:@"%lu", (unsigned long)postData.length] forHTTPHeaderField:@"Content-Length"];
-    
-    NSString *kToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"token"];
-    if (kToken.length != 0) {
-        [mutableRequest setValue:[NSString stringWithFormat:@"token=%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"token"]] forHTTPHeaderField:@"Cookie"];
-    }
-    
-    urlRequest = [mutableRequest copy];
-    return urlRequest;
-}
+//#pragma mark - Request Parameters
+//+ (void)sendHttpRequestWithHTTPURLString:(NSString *)URLString
+//                              parameters:(NSMutableDictionary *)parameters
+//                                 success:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel *kBasicModel))success
+//                                 failure:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel, NSError * _Nullable error, NSString * _Nullable errorStr))failure {
+//    [self sendHttpRequestWithHTTPMethod:@"POST" URLString:URLString parameters:parameters success:success failure:failure];
+//}
+//+ (void)sendHttpRequestWithHTTPMethod:(NSString *)method
+//                            URLString:(NSString *)URLString
+//                           parameters:(NSMutableDictionary *)parameters
+//                              success:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel *kBasicModel))success
+//                              failure:(void (^)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel, NSError * _Nullable error, NSString * _Nullable errorStr))failure {
+//    NSURLRequest *urlRequest = [KHttpPackageModel HTTPRequestOperationForUploadDataWithHTTPMethod:method URLString:URLString parameters:parameters];
+//    __block void(^kSuccessBlock)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel) = success;
+//    __block void(^kFailureBlock)(NSHTTPURLResponse * _Nullable response, KBasicModel * _Nullable kBasicModel, NSError * _Nullable error, NSString * _Nullable errorStr) = failure;
+//    kWeakfy(self);
+//    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+//        kStrongfy(kWeakSelf);
+//        NSString *jsonStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//        KBasicModel *kBasicModel = [KBasicModel yy_modelWithJSON:jsonStr];
+//
+//        if (httpResponse.statusCode == 200 && kBasicModel.code == 200) {
+//            [kStrongSelf returnSuccessByHttpResponse:httpResponse andKBasicModel:kBasicModel andSuccess:kSuccessBlock];
+//        }else{
+//            [kStrongSelf returnFailureByHttpResponse:httpResponse andKBasicModel:kBasicModel andError:error andFailure:kFailureBlock];
+//        }
+//    }];
+//    [task resume];
+//}
+//
+//#pragma mark - UploadData URLRequest
+//+ (NSURLRequest *)HTTPRequestOperationForUploadDataWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(NSDictionary *)parameters {
+//    URLString = [URLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+//
+//    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URLString]];
+//
+//    NSMutableURLRequest *mutableRequest = [urlRequest mutableCopy];
+//    mutableRequest.timeoutInterval = timeoutInterval_1;
+//    mutableRequest.cachePolicy = NSURLRequestReloadIgnoringCacheData;
+//    [mutableRequest setHTTPMethod:method];
+//
+//    NSData *postData = [[self kNSStringFromNSDictionary:parameters] dataUsingEncoding:NSUTF8StringEncoding];
+//    [mutableRequest setHTTPBody:postData];
+//    [mutableRequest setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded"] forHTTPHeaderField:@"Content-Type"];
+//    //[mutableRequest setValue:[NSString stringWithFormat:@"application/json"] forHTTPHeaderField:@"Content-Type"];
+//    [mutableRequest setValue:[NSString stringWithFormat:@"%lu", (unsigned long)postData.length] forHTTPHeaderField:@"Content-Length"];
+//
+//    NSString *kToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"token"];
+//    if (kToken.length != 0) {
+//        [mutableRequest setValue:[NSString stringWithFormat:@"token=%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"token"]] forHTTPHeaderField:@"Cookie"];
+//    }
+//
+//    urlRequest = [mutableRequest copy];
+//    return urlRequest;
+//}
 
 
 @end

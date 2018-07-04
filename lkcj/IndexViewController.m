@@ -14,6 +14,7 @@
 #import "category/categorlistController.h"
 #import "UIColor+Hex.h"
 #import "AppConfig.h"
+#import "AppUtil.h"
 @interface IndexViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property UICollectionView *collectionView;
 @property IndexBanner *banner;
@@ -32,67 +33,21 @@
 }
 -(void)getdatalist{
     NSString *urlString = @"http://oa.jianguanoa.com/app-data-list/get-main-menu.do";
-    // 一些特殊字符编码
-    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
-    // 3.采用苹果提供的共享session
-    NSURLSession *sharedSession = [NSURLSession sharedSession];
-    
-    // 4.由系统直接返回一个dataTask任务
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        // 网络请求完成之后就会执行，NSURLSession自动实现多线程
-        NSLog(@"%@",[NSThread currentThread]);
-        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        if (data && (error == nil)) {
-            // 网络访问成功
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            self.catlists=[json valueForKey:@"result"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadData];
-            });
-        } else {
-            // 网络访问失败
-            NSLog(@"error=%@",error);
-        }
+    [AppUtil getDataFrom:urlString withParams:nil andBlock:^(NSDictionary *data) {
+        self.catlists=[data valueForKey:@"result"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadData];
+        });
     }];
-    
-    // 5.每一个任务默认都是挂起的，需要调用 resume 方法
-    [dataTask resume];
 }
 -(void)getremindlist{
     NSString *urlString = @"http://oa.jianguanoa.com/reminder-config/get-all-remind-app.do";
-    // 一些特殊字符编码
-    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    // 2.创建请求 并：设置缓存策略为每次都从网络加载 超时时间30秒
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
-    // 3.采用苹果提供的共享session
-    NSURLSession *sharedSession = [NSURLSession sharedSession];
-    
-    // 4.由系统直接返回一个dataTask任务
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        // 网络请求完成之后就会执行，NSURLSession自动实现多线程
-        NSLog(@"%@",[NSThread currentThread]);
-        NSLog(@"data=%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-        if (data && (error == nil)) {
-            // 网络访问成功
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            self.remindlists=[json valueForKey:@"result"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadData];
-            });
-        } else {
-            // 网络访问失败
-            NSLog(@"error=%@",error);
-        }
+    [AppUtil getDataFrom:urlString withParams:nil andBlock:^(NSDictionary *data) {
+        self.remindlists=[data valueForKey:@"result"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadData];
+        });
     }];
-    
-    // 5.每一个任务默认都是挂起的，需要调用 resume 方法
-    [dataTask resume];
 }
 -(void)initDatalist{
     UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc]init];
@@ -101,7 +56,7 @@
     layout.sectionInset = UIEdgeInsetsMake(0,0,30,0);
     layout.minimumLineSpacing=0;
     layout.minimumInteritemSpacing=0;
-     self.collectionView=[[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:layout];
+    self.collectionView=[[UICollectionView alloc]initWithFrame:self.view.frame collectionViewLayout:layout];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     self.collectionView.backgroundColor=[UIColor clearColor];
     self.collectionView.showsVerticalScrollIndicator=NO;
@@ -109,11 +64,11 @@
     self.collectionView.dataSource=self;
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[IndexBanner class]
-       forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-              withReuseIdentifier:@"banner"];
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:@"banner"];
     [self.collectionView registerClass:[TitleReusableView class]
-       forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-              withReuseIdentifier:@"title"];
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:@"title"];
 }
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return 2;
@@ -179,10 +134,10 @@
     UIImageView *image;
     if(indexPath.section==0){
         cellData=[self.catlists objectAtIndex:indexPath.row];
-         label.text=[cellData valueForKey:@"text"];
+        label.text=[cellData valueForKey:@"text"];
         NSString *categoryType = [[cellData valueForKey:@"name"] lowercaseString];
-             image=[[UIImageView alloc] initWithImage:[UIImage imageNamed:[AppConfig getImageSelectedFromMoudleType:categoryType]]];
-
+        image=[[UIImageView alloc] initWithImage:[UIImage imageNamed:[AppConfig getImageSelectedFromMoudleType:categoryType]]];
+        
     }else if(indexPath.section==1){
         cellData=[self.remindlists objectAtIndex:indexPath.row];
         label.text=[cellData valueForKey:@"title"];
@@ -209,11 +164,11 @@
         [self.navigationController pushViewController:category animated:false];
     }else{
         categorlistController *list=[[categorlistController alloc] init];
-       NSDictionary *cellData=[self.remindlists objectAtIndex:indexPath.row];
+        NSDictionary *cellData=[self.remindlists objectAtIndex:indexPath.row];
         list.functionId= [cellData valueForKey:@"functionId"];
         [self.navigationController pushViewController:list animated:false];
     }
-
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

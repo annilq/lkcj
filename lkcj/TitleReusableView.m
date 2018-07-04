@@ -20,7 +20,7 @@
     return self;
 }
 -(void)subViewsInit{
-     self.label=[[UILabel alloc]initWithFrame:self.bounds];
+    self.label=[[UILabel alloc]initWithFrame:self.bounds];
     self.label.backgroundColor=[UIColor colorWithHexString:@"f5f5f5"];
     self.label.textColor=[UIColor colorWithHexString:@"8c8c8c"];
     [self addSubview:self.label];

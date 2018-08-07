@@ -9,11 +9,21 @@
 #import "DataListCellTableViewCell.h"
 #import "UIColor+Hex.h"
 #import "AppConfig.h"
+@interface DataListCellTableViewCell()
+@property (strong,nonatomic) UILabel *assigneeLabel;
+@property (strong,nonatomic) UILabel *nameLabel;
+@property (strong,nonatomic) UILabel *dateLabel;
+@property (strong,nonatomic) UILabel *businessKeyLabel;
+@property (strong,nonatomic) UIImageView *img;
+
+@end
 @implementation DataListCellTableViewCell
+@synthesize nameLabel,img,assigneeLabel,businessKeyLabel,dateLabel;
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self=[super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    [self initLabel];
     return self;
 }
 -(void) configCellWithData:(NSDictionary *)cellData{
@@ -23,30 +33,35 @@
     NSString *businessKey=[cellData objectForKey:@"businessKey"];
     NSString *createTime=[cellData objectForKey:@"createTime"];
     NSString *imgstr=[AppConfig getImageFromformKey:formKey];
-    UIImageView *img=[[UIImageView alloc]initWithImage:[UIImage imageNamed:imgstr]];
-    img.frame=CGRectMake(10, 35, 25, 25);
+    self.nameLabel.text=name;
+    self.assigneeLabel.text=assignee;
+    self.businessKeyLabel.text=businessKey;
+    self.dateLabel.text=createTime;
+    [self.img setImage: [UIImage imageNamed:imgstr]];
+}
+-(void) initLabel{
+    self.img=[[UIImageView alloc]init];
+    self.img.frame=CGRectMake(10, 15, 25, 25);
     
-    UILabel *businessKeyLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, self.frame.size.width, 25)];
-    businessKeyLabel.text=businessKey;
+    self.assigneeLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 35, self.frame.size.width, 25)];
+    self.assigneeLabel.textColor=[UIColor colorWithHexString:@"999999"];
+    self.assigneeLabel.font=[UIFont systemFontOfSize:14];
     
-    UILabel *assigneeLabel=[[UILabel alloc] initWithFrame:CGRectMake(10, 5, self.frame.size.width, 25)];
-    assigneeLabel.text=assignee;
+    self.nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 15, 100, 25)];
 
-    UILabel *nameLabel=[[UILabel alloc] initWithFrame:CGRectMake(40, 35, 100, 25)];
-    nameLabel.text=name;
-    nameLabel.textColor=[UIColor colorWithHexString:@"999999"];
-    nameLabel.font=[UIFont systemFontOfSize:14];
-
-    UILabel *dateLabel=[[UILabel alloc] initWithFrame:CGRectMake(160, 35, 100, 25)];
-    dateLabel.text=createTime;
-    dateLabel.textColor=[UIColor colorWithHexString:@"999999"];
-    dateLabel.font=[UIFont systemFontOfSize:14];
+    self.dateLabel=[[UILabel alloc] initWithFrame:CGRectMake(160, 15, 100, 25)];
+    self.dateLabel.textColor=[UIColor colorWithHexString:@"999999"];
+    self.dateLabel.font=[UIFont systemFontOfSize:14];
     
+    self.businessKeyLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 55, self.frame.size.width, 25)];
+    self.businessKeyLabel.textColor=[UIColor colorWithHexString:@"999999"];
+    self.businessKeyLabel.font=[UIFont systemFontOfSize:14];
+   
     [self.contentView addSubview:img];
-    [self.contentView addSubview:assigneeLabel];
-    [self.contentView addSubview:nameLabel];
-    [self.contentView addSubview:dateLabel];
-    [self.contentView addSubview:businessKeyLabel];
+    [self.contentView addSubview:self.assigneeLabel];
+    [self.contentView addSubview:self.nameLabel];
+    [self.contentView addSubview:self.dateLabel];
+    [self.contentView addSubview:self.businessKeyLabel];
 }
 - (void)drawRect:(CGRect)rect
 {

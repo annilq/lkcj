@@ -16,19 +16,19 @@
 @property UISearchBar *searchbar;
 @property UISegmentedControl *seg;
 @property UITableViewCell *cell;
-@property NSArray *catlists;
-@property NSNumber *flag;
-
+@property NSMutableArray *catlists;
+@property int start;
+@property int total;
 @end
 
 @implementation DatalistViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.catlists=[[NSMutableArray alloc] init];
     self.navigationItem.title=@"待我审批";
     [self initserachbar];
     [self initsegment];
-    [self getdatalist];
+    [self getdatalist:0];
     [self initTable];
 }
 -(void)initserachbar{
@@ -58,18 +58,24 @@
 }
 -(void)switchTab:(UISegmentedControl *)seg{
     NSLog(@"%ld",seg.selectedSegmentIndex);
-    [self getdatalist];
+    self.catlists=[[NSMutableArray alloc] init];
+    [self getdatalist:0];
 }
--(void)getdatalist{
+-(void)getdatalist:(int) start{
     NSMutableString *urlString;
-    if(self.seg.selectedSegmentIndex==1){
+    if(self.seg.selectedSegmentIndex==0){
         urlString =[NSMutableString stringWithFormat: @"http://oa.jianguanoa.com//my-task/get-untreated.do"];
     }else{
         urlString =[NSMutableString stringWithFormat: @"http://oa.jianguanoa.com//my-task/get-treated.do"];
     }
-    NSDictionary *param=@{@"limit":[NSNumber numberWithInt:10],@"start":[NSNumber numberWithInt:0]};
+    NSDictionary *param=@{@"limit":[NSNumber numberWithInt:10],@"start":[NSNumber numberWithInt:start]};
     [AppUtil getDataFrom:urlString withParams:param andBlock:^(NSDictionary *data) {
-        self.catlists=[data valueForKey:@"dataList"];
+//        self.catlists=[data valueForKey:@"dataList"];
+        NSMutableArray* datas=[data valueForKey:@"dataList"];
+        [self.catlists addObjectsFromArray:datas];
+        self.start=[[data valueForKey:@"startIndex"] integerValue];
+        self.total=[[data valueForKey:@"totalCount"] integerValue];
+        NSLog(@"%d===%d",self.start,self.total);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.table reloadData];
         });
@@ -97,6 +103,10 @@
     return [self.catlists count];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if([indexPath row] == ([self.catlists count]-1)&&self.start<=self.total)
+    {
+        [self getdatalist:self.start+10];
+    }
     DataListCellTableViewCell *cell=[self.table dequeueReusableCellWithIdentifier:@"cell"];
     if(cell==nil){
         cell=[[DataListCellTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];

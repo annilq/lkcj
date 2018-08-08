@@ -64,7 +64,7 @@
 -(void)getdatalist:(NSInteger) start{
     NSString *urlString = @"http://oa.jianguanoa.com/my-process/my-process-list-for-app.do";
     NSDictionary *param=@{@"flag":[NSNumber numberWithInt:(int)self.seg.selectedSegmentIndex+1],@"limit":[NSNumber numberWithInt:10],@"start":[NSNumber numberWithInt:start]};
-
+    
     NSLog(@"data11111=========%@",param);
     [AppUtil getDataFrom:urlString withParams:param andBlock:^(NSDictionary *data) {
         NSMutableArray* datas=[data valueForKey:@"dataList"];
@@ -72,6 +72,9 @@
         self.start=[[data valueForKey:@"startIndex"] integerValue];
         self.total=[[data valueForKey:@"totalCount"] integerValue];        dispatch_async(dispatch_get_main_queue(), ^{
             [self.table reloadData];
+            if(start==0){
+                [self.table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            }
         });
     }];
 }
@@ -123,13 +126,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

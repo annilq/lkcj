@@ -70,7 +70,7 @@
     }
     NSDictionary *param=@{@"limit":[NSNumber numberWithInt:10],@"start":[NSNumber numberWithInt:start]};
     [AppUtil getDataFrom:urlString withParams:param andBlock:^(NSDictionary *data) {
-//        self.catlists=[data valueForKey:@"dataList"];
+        //        self.catlists=[data valueForKey:@"dataList"];
         NSMutableArray* datas=[data valueForKey:@"dataList"];
         [self.catlists addObjectsFromArray:datas];
         self.start=[[data valueForKey:@"startIndex"] integerValue];
@@ -78,6 +78,9 @@
         NSLog(@"%d===%d",self.start,self.total);
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.table reloadData];
+            if(start==0){
+                [self.table scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            }
         });
     }];
     
